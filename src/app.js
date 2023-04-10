@@ -27,8 +27,8 @@ mongoose.connect("mongodb://localhost:27017/web17301", { useUnifiedTopology: tru
 app.use("/", (req, res) => {
     res.send("hello word");
 });
-// app.listen(8000, () => {
-//     console.log("I am running port 8000");
-// });
+app.listen(8000, () => {
+    console.log("I am running port 8000");
+});
 
 export const viteNodeApp = app;
