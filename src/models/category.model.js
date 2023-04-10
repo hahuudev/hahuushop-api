@@ -11,6 +11,10 @@ const Category = new mongoose.Schema(
 
 Category.plugin(mongoosePaginate);
 
+Category.index({ name: "text" });
+
 const CategoryModel = mongoose.model("Categories", Category);
+
+CategoryModel.createIndexes({ name: "text" });
 
 export default CategoryModel;

@@ -34,6 +34,28 @@ export const getAllProducts = async (req, res) => {
     }
 };
 
+export const getProductsByCategoryId = async (req, res) => {
+    try {
+        const { _sort = "createdAt", page = 1, limit = 10, _order = "desc" } = req.query;
+        const options = {
+            page,
+            limit,
+            sort: {
+                [_sort]: _order === "desc" ? 1 : -1,
+            },
+        };
+
+        const { docs, ...data } = await ProductModel.paginate({ categoryId: req.params.id }, options);
+        res.json({
+            meassge: "Success",
+            products: docs,
+            ...data,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getProductBySlug = async (req, res) => {
     try {
         const data = await ProductModel.findOne({ slug: req.params.id });

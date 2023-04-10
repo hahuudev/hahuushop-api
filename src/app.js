@@ -6,10 +6,12 @@ import authRouter from "./router/auth.router.js";
 import uploadRouter from "./router/upload.router.js";
 import searchRouter from "./router/search.router.js";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(cors({ credentials: true }));
+app.use(cookieParser());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

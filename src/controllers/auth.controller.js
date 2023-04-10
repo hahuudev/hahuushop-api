@@ -1,6 +1,7 @@
 import UserModel from "~/models/user.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+let list_token = [];
 
 export const signup = async (req, res) => {
     try {
@@ -57,10 +58,11 @@ export const signin = async (req, res) => {
 
         const access_token = jwt.sign({ _id }, "secretKey", { expiresIn: "1d" });
         const refresh_token = jwt.sign({ _id }, "secretKey", { expiresIn: "2d" });
+        list_token.push(refresh_token);
 
         return res
             .status(201)
-            .cookie("token", refresh_token, {
+            .cookie("refresh_token", refresh_token, {
                 httpOnly: true,
                 samsite: "strict",
                 maxAge: 2 * 24 * 60 * 60 * 1000,
@@ -83,28 +85,37 @@ export const getAuth = async (req, res) => {
 
 export const logout = async (req, res) => {
     try {
+        list_token = list_token.filter((token) => token !== refreshToken);
         res.status(200).clearCookie("refresh_token").json({ message: "Logout successfully" });
     } catch (error) {
         console.log(error);
     }
 };
+
 export const refreshToken = async (req, res) => {
     try {
-        if (!req.cookies.refresh_token) {
+        if (!req.cookies?.refresh_token) {
             return res.status(401).json({ message: "Bạn chưa đăng nhập" });
         }
-        const resfreshToken = req.cookies.refresh_token.split(" ")[1];
+        const resfreshToken = req.cookies.refresh_token;
+
+        if (!list_token.includes(refreshToken)) {
+            return res.status(401).json({ message: "Refresh token không hợp lệ" });
+        }
 
         jwt.verify(resfreshToken, "secretKey", async (error, payload) => {
             if (error) {
                 return res.status(401).json({ message: error.name });
             }
 
-            const new_access_token = jwt.sign({ _id }, "secretKey", { expiresIn: "1d" });
-            const new_refresh_token = jwt.sign({ _id }, "secretKey", { expiresIn: "2d" });
+            list_token = list_token.filter((token) => token !== refreshToken);
 
+            const new_access_token = jwt.sign({ _id: payload._id }, "secretKey", { expiresIn: "1d" });
+            const new_refresh_token = jwt.sign({ _id: payload._id }, "secretKey", { expiresIn: "2d" });
+
+            list_token.push(new_refresh_token);
             res.status(200)
-                .cookie("token", new_refresh_token, {
+                .cookie("refresh_token", new_refresh_token, {
                     httpOnly: true,
                     samsite: "strict",
                     maxAge: 2 * 24 * 60 * 60 * 1000,
