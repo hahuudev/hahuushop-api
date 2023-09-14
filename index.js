@@ -1,10 +1,10 @@
 import express from "express";
 import cors from "cors";
-import productRouter from "./router/products.js";
-import categoryRouter from "./router/category.router.js";
-import authRouter from "./router/auth.router.js";
-import uploadRouter from "./router/upload.router.js";
-import searchRouter from "./router/search.router.js";
+import productRouter from "./src/router/products.js";
+import categoryRouter from "./src/router/category.router.js";
+import authRouter from "./src/router/auth.router.js";
+import uploadRouter from "./src/router/upload.router.js";
+import searchRouter from "./src/router/search.router.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import "dotenv/config";

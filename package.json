@@ -8,10 +8,10 @@
     },
     "scripts": {
         "clean": "rm -rf build && mkdir build",
-        "build-babel": "babel ./src -d ./build/src",
+        "build-babel": "babel . -d ./build",
         "build": "npm run clean && npm run build-babel",
-        "production": "npm run build && node ./build/src/index.js",
-        "dev": "nodemon --exec ./node_modules/.bin/babel-node ./src/index.js"
+        "production": "npm run build && node ./build/index.js",
+        "dev": "nodemon --exec ./node_modules/.bin/babel-node index.js"
     },
     "keywords": [],
     "author": "",
