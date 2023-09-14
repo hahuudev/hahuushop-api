@@ -26,7 +26,7 @@ app.use("/api", searchRouter);
 mongoose.connect(process.env.MONGODB_ATLATS, { useUnifiedTopology: true, useNewUrlParser: true });
 
 app.use("/", (req, res) => {
-    res.send("hello word");
+    res.send("hello word Nguyễn Hà Hữu");
 });
 
 mongoose.connection.once("open", () => {
