@@ -1,12 +1,13 @@
 import express from "express";
 import cors from "cors";
 import productRouter from "./router/products.js";
-import categoryRouter from "./router/category.router";
+import categoryRouter from "./router/category.router.js";
 import authRouter from "./router/auth.router.js";
 import uploadRouter from "./router/upload.router.js";
 import searchRouter from "./router/search.router.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import "dotenv/config";
 
 const app = express();
 
@@ -22,13 +23,15 @@ app.use("/api", authRouter);
 app.use("/api", uploadRouter);
 app.use("/api", searchRouter);
 
-mongoose.connect("mongodb://localhost:27017/web17301", { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_ATLATS, { useUnifiedTopology: true, useNewUrlParser: true });
 
 app.use("/", (req, res) => {
     res.send("hello word");
 });
-app.listen(8000, () => {
-    console.log("I am running port 8000");
-});
 
-export const viteNodeApp = app;
+mongoose.connection.once("open", () => {
+    console.log("ConnectDb successfully");
+    app.listen(8000, () => {
+        console.log("I am running port 8000");
+    });
+});

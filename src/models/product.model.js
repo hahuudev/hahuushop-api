@@ -11,7 +11,7 @@ const Product = new mongoose.Schema(
         price: { type: Number },
         original_price: { type: Number },
         description: { type: String },
-        images: [{ url: { type: String, publicId: { type: String } }, _id: false }],
+        images: [{ base_url: { type: String, publicId: { type: String } }, _id: false }],
         categoryId: { type: mongoose.SchemaTypes.ObjectId, ref: "Categories", require: true },
     },
     { collection: "Products", timestamps: true }
